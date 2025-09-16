@@ -726,6 +726,14 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             </ul>
+                                            {% if recipe.source_url %}
+                                            <div class="recipe-link" style="margin-top: 1rem;">
+                                                <a href="{{ recipe.source_url }}" target="_blank" rel="noopener noreferrer" 
+                                                   style="color: #2563eb; text-decoration: none; padding: 0.5rem 1rem; background: #f8fafc; border-radius: 8px; display: inline-block; font-weight: 500; border: 1px solid #e2e8f0;">
+                                                    🌐 View Original Recipe
+                                                </a>
+                                            </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <button type="button" class="delete-btn" onclick="deleteRecipe({{ recipe.id }})" title="Delete Recipe">✕</button>
