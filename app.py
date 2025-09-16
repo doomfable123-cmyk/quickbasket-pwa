@@ -170,7 +170,8 @@ def add_recipe_url():
                 new_recipe = Recipe(
                     title=formatted_recipe['title'],
                     ingredients=formatted_recipe['ingredients'],
-                    source_url=formatted_recipe['source_url']
+                    instructions=formatted_recipe.get('instructions', ''),
+                    source_url=url  # Use the original URL directly
                 )
                 session.add(new_recipe)
                 session.commit()
@@ -310,10 +311,10 @@ def api_add_recipe_url():
             
             # Create and save recipe
             new_recipe = Recipe(
-                name=recipe_data['name'],
+                title=recipe_data['title'],
                 ingredients=recipe_data['ingredients'],
                 instructions=recipe_data.get('instructions', ''),
-                url=url
+                source_url=url
             )
             
             session.add(new_recipe)
@@ -378,7 +379,7 @@ def api_add_recipe_manual():
             
             # Create and save recipe
             new_recipe = Recipe(
-                name=name,
+                title=name,
                 ingredients=ingredients,
                 instructions=instructions or ''
             )
