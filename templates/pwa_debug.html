@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Install Debug - QuickBasket</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .debug-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .status-ok { color: #22c55e; }
+        .status-error { color: #ef4444; }
+        .status-warning { color: #f59e0b; }
+        button {
+            background: #2c5530;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1f3d23; }
+        .test-result { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 6px; 
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 PWA Install Debug Tool</h1>
+    
+    <div class="debug-card">
+        <h2>Browser Information</h2>
+        <div id="browser-info"></div>
+    </div>
+    
+    <div class="debug-card">
+        <h2>PWA Install Criteria</h2>
+        <div id="pwa-criteria"></div>
+        <button onclick="checkCriteria()">Re-check Criteria</button>
+    </div>
+    
+    <div class="debug-card">
+        <h2>Install Tests</h2>
+        <button onclick="testInstallPrompt()">Test Install Prompt</button>
+        <button onclick="testServiceWorker()">Test Service Worker</button>
+        <button onclick="testManifest()">Test Manifest</button>
+        <div id="test-results"></div>
+    </div>
+    
+    <div class="debug-card">
+        <h2>Quick Actions</h2>
+        <button onclick="window.location.href='/'">← Back to QuickBasket</button>
+        <button onclick="clearStorage()">Clear Storage</button>
+        <button onclick="copyDebugInfo()">Copy Debug Info</button>
+    </div>
+    
+    <script>
+        let deferredPrompt = null;
+        
+        // Browser detection
+        function getBrowserInfo() {
+            const ua = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+            const isAndroid = /Android/.test(ua);
+            const isChrome = /Chrome/.test(ua) && /Google Inc/.test(navigator.vendor);
+            const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+            const isFirefox = /Firefox/.test(ua);
+            const isEdge = /Edg/.test(ua);
+            
+            return {
+                userAgent: ua,
+                isIOS, isAndroid, isChrome, isSafari, isFirefox, isEdge,
+                hasServiceWorker: 'serviceWorker' in navigator,
+                isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+                isFullscreen: window.matchMedia('(display-mode: fullscreen)').matches
+            };
+        }
+        
+        // Display browser info
+        function displayBrowserInfo() {
+            const info = getBrowserInfo();
+            const container = document.getElementById('browser-info');
+            
+            container.innerHTML = `
+                <div><strong>User Agent:</strong> ${info.userAgent}</div>
+                <div><strong>Platform:</strong> 
+                    ${info.isIOS ? '📱 iOS' : ''}
+                    ${info.isAndroid ? '🤖 Android' : ''}
+                    ${!info.isIOS && !info.isAndroid ? '💻 Desktop' : ''}
+                </div>
+                <div><strong>Browser:</strong>
+                    ${info.isChrome ? '🟡 Chrome' : ''}
+                    ${info.isSafari ? '🔵 Safari' : ''}
+                    ${info.isFirefox ? '🟠 Firefox' : ''}
+                    ${info.isEdge ? '🟢 Edge' : ''}
+                </div>
+                <div><strong>Service Worker Support:</strong> 
+                    <span class="${info.hasServiceWorker ? 'status-ok' : 'status-error'}">
+                        ${info.hasServiceWorker ? '✅ Yes' : '❌ No'}
+                    </span>
+                </div>
+                <div><strong>Already Installed:</strong> 
+                    <span class="${info.isStandalone ? 'status-warning' : 'status-ok'}">
+                        ${info.isStandalone ? '⚠️ Yes (PWA mode)' : '✅ No (can install)'}
+                    </span>
+                </div>
+            `;
+        }
+        
+        // Check PWA install criteria
+        function checkCriteria() {
+            const container = document.getElementById('pwa-criteria');
+            const info = getBrowserInfo();
+            
+            // Criteria checks
+            const checks = [
+                {
+                    name: 'HTTPS or Localhost',
+                    pass: location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1',
+                    message: 'PWA requires HTTPS (or localhost for testing)'
+                },
+                {
+                    name: 'Service Worker',
+                    pass: info.hasServiceWorker,
+                    message: 'Service Worker API must be supported'
+                },
+                {
+                    name: 'Web App Manifest',
+                    pass: true, // We'll test this separately
+                    message: 'manifest.json must be valid and linked'
+                },
+                {
+                    name: 'Not Already Installed',
+                    pass: !info.isStandalone,
+                    message: 'Install prompt only shows for uninstalled apps'
+                },
+                {
+                    name: 'User Engagement',
+                    pass: true,
+                    message: 'Chrome requires user interaction (you opened this page)'
+                }
+            ];
+            
+            let html = '<h3>Install Criteria Status:</h3>';
+            checks.forEach(check => {
+                html += `
+                    <div class="test-result">
+                        <span class="${check.pass ? 'status-ok' : 'status-error'}">
+                            ${check.pass ? '✅' : '❌'} ${check.name}
+                        </span>
+                        <br><small>${check.message}</small>
+                    </div>
+                `;
+            });
+            
+            const allPass = checks.every(c => c.pass);
+            html += `<div class="test-result ${allPass ? 'status-ok' : 'status-warning'}">
+                <strong>${allPass ? '✅ All criteria met!' : '⚠️ Some criteria not met'}</strong>
+            </div>`;
+            
+            container.innerHTML = html;
+        }
+        
+        // Test install prompt
+        function testInstallPrompt() {
+            const results = document.getElementById('test-results');
+            
+            if (deferredPrompt) {
+                results.innerHTML += `
+                    <div class="test-result status-ok">
+                        ✅ Install prompt available - triggering now...
+                    </div>
+                `;
+                
+                deferredPrompt.prompt().then(() => {
+                    return deferredPrompt.userChoice;
+                }).then(result => {
+                    results.innerHTML += `
+                        <div class="test-result status-ok">
+                            📱 User choice: ${result.outcome}
+                        </div>
+                    `;
+                    if (result.outcome === 'accepted') {
+                        deferredPrompt = null;
+                    }
+                }).catch(err => {
+                    results.innerHTML += `
+                        <div class="test-result status-error">
+                            ❌ Install prompt error: ${err.message}
+                        </div>
+                    `;
+                });
+            } else {
+                const info = getBrowserInfo();
+                let message = '⚠️ No install prompt available. ';
+                
+                if (info.isStandalone) {
+                    message += 'App is already installed.';
+                } else if (info.isSafari) {
+                    message += 'Safari users: Use Share → Add to Home Screen';
+                } else if (info.isChrome) {
+                    message += 'Chrome: Check if PWA criteria are met, or look for install button in address bar.';
+                } else {
+                    message += 'Try using Chrome, Edge, or check browser menu for install options.';
+                }
+                
+                results.innerHTML += `<div class="test-result status-warning">${message}</div>`;
+            }
+        }
+        
+        // Test service worker
+        function testServiceWorker() {
+            const results = document.getElementById('test-results');
+            
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistration('/static/sw.js')
+                    .then(registration => {
+                        if (registration) {
+                            results.innerHTML += `
+                                <div class="test-result status-ok">
+                                    ✅ Service Worker registered: ${registration.scope}
+                                </div>
+                            `;
+                        } else {
+                            results.innerHTML += `
+                                <div class="test-result status-warning">
+                                    ⚠️ Service Worker not registered - registering now...
+                                </div>
+                            `;
+                            
+                            navigator.serviceWorker.register('/static/sw.js')
+                                .then(reg => {
+                                    results.innerHTML += `
+                                        <div class="test-result status-ok">
+                                            ✅ Service Worker registered successfully
+                                        </div>
+                                    `;
+                                })
+                                .catch(err => {
+                                    results.innerHTML += `
+                                        <div class="test-result status-error">
+                                            ❌ Service Worker registration failed: ${err.message}
+                                        </div>
+                                    `;
+                                });
+                        }
+                    });
+            } else {
+                results.innerHTML += `
+                    <div class="test-result status-error">
+                        ❌ Service Worker not supported in this browser
+                    </div>
+                `;
+            }
+        }
+        
+        // Test manifest
+        function testManifest() {
+            const results = document.getElementById('test-results');
+            
+            fetch('/static/manifest.json')
+                .then(response => response.json())
+                .then(manifest => {
+                    results.innerHTML += `
+                        <div class="test-result status-ok">
+                            ✅ Manifest loaded successfully
+                            <br><small>Name: ${manifest.name}</small>
+                            <br><small>Icons: ${manifest.icons.length} defined</small>
+                            <br><small>Start URL: ${manifest.start_url}</small>
+                            <br><small>Display: ${manifest.display}</small>
+                        </div>
+                    `;
+                })
+                .catch(err => {
+                    results.innerHTML += `
+                        <div class="test-result status-error">
+                            ❌ Manifest load failed: ${err.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        // Clear storage
+        function clearStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(registration => registration.unregister());
+                });
+            }
+            alert('Storage cleared! Refresh page to restart.');
+        }
+        
+        // Copy debug info
+        function copyDebugInfo() {
+            const info = getBrowserInfo();
+            const debugText = `QuickBasket PWA Debug Info:
+URL: ${location.href}
+User Agent: ${info.userAgent}
+iOS: ${info.isIOS}
+Android: ${info.isAndroid} 
+Chrome: ${info.isChrome}
+Safari: ${info.isSafari}
+Service Worker Support: ${info.hasServiceWorker}
+Standalone Mode: ${info.isStandalone}
+Has Deferred Prompt: ${!!deferredPrompt}
+Date: ${new Date().toISOString()}`;
+            
+            navigator.clipboard.writeText(debugText).then(() => {
+                alert('Debug info copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this debug info:', debugText);
+            });
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            displayBrowserInfo();
+            checkCriteria();
+        });
+        
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('test-results').innerHTML += `
+                <div class="test-result status-ok">
+                    ✅ Install prompt detected and captured!
+                </div>
+            `;
+        });
+        
+        window.addEventListener('appinstalled', (evt) => {
+            document.getElementById('test-results').innerHTML += `
+                <div class="test-result status-ok">
+                    🎉 App installed successfully!
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

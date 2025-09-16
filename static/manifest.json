@@ -1,0 +1,44 @@
+{
+  "name": "QuickBasket - Smart Recipe & Grocery Manager",
+  "short_name": "QuickBasket",
+  "description": "Smart recipe and grocery list manager for tablets with web scraping capabilities",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#2c5530",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-maskable-192.png",
+      "sizes": "192x192", 
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/static/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png", 
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["food", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
+}

@@ -1,0 +1,5 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <rect width="512" height="512" fill="#2c5530"/>
+    <circle cx="256" cy="256" r="170" fill="white" stroke="#2c5530" stroke-width="4"/>
+    <text x="256" y="298" text-anchor="middle" font-family="Arial" font-size="85" font-weight="bold" fill="#2c5530">QB</text>
+</svg>
