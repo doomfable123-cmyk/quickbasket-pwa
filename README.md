@@ -19,7 +19,17 @@ The desktop app includes:
 - 📱 **Same PWA Features** - All web app functionality in desktop form
 - 🌐 **Recipe URL Scraping** - Import recipes from any cooking website
 - 💾 **Local Database** - All data stored locally on your computer
-- 🔄 **Automatic Updates** - Download new versions as releasedessive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
+- 🔄 **Automatic Updates** - Download new versions as released
+
+#### 🔐 Security & Trust
+
+To reduce Windows Defender warnings, you can digitally sign the executable:
+
+1. **Quick Setup**: Double-click `Sign QuickBasket.bat` (requires Administrator privileges)
+2. **Advanced Options**: See [CODE_SIGNING.md](CODE_SIGNING.md) for detailed instructions
+3. **Commercial Certificates**: For wider distribution, consider purchasing a code signing certificate
+
+**Note**: The unsigned version may show "Unknown Publisher" warnings - this is normal for new executables.essive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
 
 ## ✨ Features
 
