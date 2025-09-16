@@ -1,6 +1,25 @@
 # 🍽️ QuickBasket PWA
 
-A Progressive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
+A ### Browser Compatibility
+- ✅ Chrome 80+
+- ✅ Safari 11.1+
+- ✅ Firefox 78+
+- ✅ Edge 80+
+
+### Windows Desktop App
+For Windows users, a standalone executable is available:
+
+1. **Download**: Get `QuickBasket.exe` from the [latest release](https://github.com/doomfable123-cmyk/quickbasket-pwa/blob/main/dist/QuickBasket.exe)
+2. **Run**: Double-click the executable - no installation required!
+3. **Features**: Full PWA functionality including offline support
+4. **Size**: ~16MB standalone executable
+
+The desktop app includes:
+- 🖥️ **No Browser Required** - Runs as native Windows application
+- 📱 **Same PWA Features** - All web app functionality in desktop form
+- 🌐 **Recipe URL Scraping** - Import recipes from any cooking website
+- 💾 **Local Database** - All data stored locally on your computer
+- 🔄 **Automatic Updates** - Download new versions as releasedessive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
 
 ## ✨ Features
 
