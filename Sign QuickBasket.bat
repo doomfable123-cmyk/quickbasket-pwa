@@ -36,7 +36,16 @@ echo 🚀 Starting PowerShell script with Administrator privileges...
 echo.
 
 REM Run PowerShell script as Administrator
-powershell -Command "Start-Process PowerShell -ArgumentList '-ExecutionPolicy Bypass -File \"sign_executable.ps1\"' -Verb RunAs -Wait"
+echo 🚀 Running signing script with Administrator privileges...
+echo You will see a UAC prompt - click "Yes" to continue.
+echo.
+powershell -Command "Start-Process PowerShell -ArgumentList '-ExecutionPolicy Bypass -File admin_signing.ps1' -Verb RunAs -Wait"
+
+echo.
+echo 🔐 Installing certificate for trust...
+echo You will see another UAC prompt - click "Yes" to trust the certificate.
+echo.
+powershell -Command "Start-Process PowerShell -ArgumentList '-ExecutionPolicy Bypass -File trust_certificate.ps1' -Verb RunAs -Wait"
 
 echo.
 echo ============================================================

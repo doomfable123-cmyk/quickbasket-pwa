@@ -58,13 +58,11 @@ Thumbs.db
 logs/
 
 # QuickBasket specific
-requirements_new.txt
-start_server.bat
+# start_server.bat - keep for local development
 
-# Build artifacts
-QuickBasket.spec
-dist/
+# PyInstaller build artifacts
 build/
 
-# Windows executable
-*.exe
+# Keep the main executable but exclude other build files
+# dist/ - keep the directory and QuickBasket.exe
+# QuickBasket.spec - keep for rebuilding executable
