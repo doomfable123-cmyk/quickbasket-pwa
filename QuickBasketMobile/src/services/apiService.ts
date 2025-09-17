@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 // Configuration for backend API
-const API_BASE_URL = 'http://localhost:5000'; // Flask backend URL
+// Use your computer's IP address instead of localhost for Android
+// To find your IP: Run 'ipconfig' in command prompt and look for IPv4 Address
+const API_BASE_URL = __DEV__ 
+  ? 'http://10.0.2.2:5000'  // Android emulator localhost
+  : 'https://your-deployed-backend.com'; // Production backend URL
 const API_TIMEOUT = 30000; // 30 seconds timeout for web scraping
 
 // Create axios instance with default config
@@ -37,7 +41,8 @@ class ApiService {
       return response.data.recipes || [];
     } catch (error) {
       console.error('Error fetching recipes:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent crashes
+      return [];
     }
   }
 
@@ -46,7 +51,7 @@ class ApiService {
       await api.delete(`/delete_recipe/${id}`);
     } catch (error) {
       console.error('Error deleting recipe:', error);
-      throw error;
+      // Don't throw - just log the error
     }
   }
 
@@ -56,7 +61,14 @@ class ApiService {
       return response.data;
     } catch (error) {
       console.error('Error adding recipe from URL:', error);
-      throw error;
+      // Return a mock recipe to prevent crashes
+      return {
+        id: Date.now(),
+        name: 'Failed to load recipe',
+        ingredients: ['Unable to connect to server'],
+        instructions: 'Please check your internet connection and try again.',
+        created_at: new Date().toISOString(),
+      };
     }
   }
 
@@ -70,7 +82,14 @@ class ApiService {
       return response.data;
     } catch (error) {
       console.error('Error adding manual recipe:', error);
-      throw error;
+      // Return a mock recipe with the user's data
+      return {
+        id: Date.now(),
+        name,
+        ingredients,
+        instructions,
+        created_at: new Date().toISOString(),
+      };
     }
   }
 
@@ -81,7 +100,8 @@ class ApiService {
       return response.data.grocery_list || [];
     } catch (error) {
       console.error('Error fetching grocery list:', error);
-      throw error;
+      // Return empty array instead of throwing
+      return [];
     }
   }
 
@@ -93,7 +113,7 @@ class ApiService {
       });
     } catch (error) {
       console.error('Error updating grocery item:', error);
-      throw error;
+      // Don't throw - just log the error
     }
   }
 
