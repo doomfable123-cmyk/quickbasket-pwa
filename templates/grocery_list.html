@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuickBasket - Grocery List</title>
+    <style>
+        /* Import Google Fonts for professional typography */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #475569;
+            --primary-hover: #334155;
+            --primary-light: #f1f5f9;
+            --success-color: #65a30d;
+            --success-hover: #4d7c0f;
+            --success-light: #f7fee7;
+            --danger-color: #dc2626;
+            --danger-hover: #b91c1c;
+            --danger-light: #fef2f2;
+            --warning-color: #d97706;
+            --warning-hover: #b45309;
+            --accent-color: #7c3aed;
+            --accent-hover: #6d28d9;
+            --neutral-50: #fafafa;
+            --neutral-100: #f4f4f5;
+            --neutral-200: #e4e4e7;
+            --neutral-300: #d4d4d8;
+            --neutral-400: #a1a1aa;
+            --neutral-500: #71717a;
+            --neutral-600: #52525b;
+            --neutral-700: #3f3f46;
+            --neutral-800: #27272a;
+            --neutral-900: #18181b;
+            --gradient-primary: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            --gradient-success: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --gradient-header: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            --gradient-optimized: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --border-radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: var(--neutral-800);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        header {
+            background: var(--gradient-header);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content h1 {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .grocery-list-block {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid var(--neutral-200);
+        }
+
+        .list-header {
+            background: var(--gradient-success);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .list-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neutral-700);
+            letter-spacing: -0.025em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .select-all-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .select-all-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .clear-list-btn {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .clear-list-btn:hover {
+            background: var(--danger-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .list-content {
+            padding: 2rem;
+        }
+
+        .ingredients-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .ingredients-list li {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            background: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .ingredients-list li:hover {
+            background: var(--neutral-50);
+            border-color: var(--neutral-300);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ingredient-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--neutral-300);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .ingredient-checkbox:checked {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .ingredient-checkbox:hover {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(101, 163, 13, 0.1);
+        }
+
+        .ingredient-checkbox:checked::before {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .checkbox-label {
+            margin-left: 1rem;
+            flex-grow: 1;
+            font-weight: 400;
+            color: var(--neutral-700);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ingredient-edit-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            margin-left: 0.5rem;
+        }
+
+        .ingredients-list li:hover .ingredient-edit-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .ingredient-edit-btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .ingredient-edit-input {
+            margin-left: 1rem;
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--neutral-700);
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .ingredient-edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .save-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: var(--success-hover);
+            transform: scale(1.05);
+        }
+
+        .cancel-btn {
+            background: var(--neutral-400);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: var(--neutral-500);
+            transform: scale(1.05);
+        }
+
+        .checkbox-label:hover {
+            color: var(--neutral-900);
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-50) 100%);
+            margin: 1.5rem 0 0.5rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--neutral-200);
+            position: sticky;
+            top: 120px;
+            z-index: 10;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-header h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--neutral-700);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .category-header:first-child {
+            margin-top: 0;
+        }
+
+        #combined-list {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--gradient-optimized);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--neutral-200);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .optimized-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .optimized-header h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--neutral-700);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--neutral-500);
+        }
+
+        .empty-state h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--neutral-600);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .list-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            
+            .button-group {
+                justify-content: center;
+            }
+            
+            .optimized-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grocery-list-block {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .ingredients-list li {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .ingredients-list li:nth-child(n) {
+            animation-delay: calc(0.1s * var(--i, 0));
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <div class="logo">QB</div>
+                <div class="header-content">
+                    <h1>Welcome to QuickBasket</h1>
+                </div>
+            </div>
+            <a href="/recipes/" class="nav-button">← Back to Recipes</a>
+        </div>
+    </header>
+    <main>
+        <div class="grocery-list-block">
+            <div class="list-header">
+                <h2>🛒 Grocery List</h2>
+                {% if ingredients %}
+                    <div class="button-group">
+                        <button type="button" class="btn select-all-btn" onclick="toggleSelectAll()">✓ Select All</button>
+                        <button type="button" class="btn select-all-btn" onclick="combineItems()">🎯 Optimize Cart</button>
+                        <button type="button" class="btn clear-list-btn" onclick="clearList()">🗑️ Clear List</button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="list-content">
+                {% if ingredients %}
+                    <form id="groceryListForm">
+                        <ul class="ingredients-list" id="original-list">
+                            {% for ingredient in ingredients %}
+                                <li style="--i: {{ loop.index0 }}">
+                                    <input type="checkbox" id="ingredient-{{ loop.index }}" class="ingredient-checkbox">
+                                    <label for="ingredient-{{ loop.index }}" class="checkbox-label">{{ ingredient }}</label>
+                                    <button type="button" class="ingredient-edit-btn" onclick="editIngredient({{ loop.index }})">✏️ Edit</button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </form>
+
+                    <div id="combined-list" style="display: none;">
+                        <div class="optimized-header">
+                            <h3>🎯 Optimized Shopping Cart</h3>
+                            <button type="button" onclick="toggleView()" class="btn select-all-btn">← Show Original List</button>
+                        </div>
+                        <ul id="combined-ingredients" class="ingredients-list">
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <h3>Your grocery list is empty</h3>
+                        <p>Add some recipes to get started with your shopping list!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        console.log('JavaScript is loading...');
+        
+        // Save checkbox state to localStorage
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log('DOM loaded');
+            initCheckboxes();
+        });
+
+        function initCheckboxes() {
+            document.querySelectorAll(".ingredient-checkbox").forEach(checkbox => {
+                const ingredientText = checkbox.nextElementSibling.textContent;
+                // Restore state from localStorage
+                checkbox.checked = localStorage.getItem(`ingredient_${ingredientText}`) === "true";
+                
+                checkbox.addEventListener("change", function() {
+                    // Save state to localStorage
+                    localStorage.setItem(`ingredient_${ingredientText}`, this.checked);
+                    
+                    // Strike through text if checked
+                    this.nextElementSibling.style.textDecoration = this.checked ? "line-through" : "none";
+                });
+                
+                // Apply initial strike-through
+                if (checkbox.checked) {
+                    checkbox.nextElementSibling.style.textDecoration = "line-through";
+                }
+            });
+        }
+
+        let allSelected = false;
+        function toggleSelectAll() {
+            allSelected = !allSelected;
+            const selectAllBtn = document.querySelector(".select-all-btn");
+            selectAllBtn.textContent = allSelected ? "Unselect All" : "Select All";
+            
+            document.querySelectorAll(".ingredient-checkbox").forEach(checkbox => {
+                const ingredientText = checkbox.nextElementSibling.textContent;
+                checkbox.checked = allSelected;
+                localStorage.setItem(`ingredient_${ingredientText}`, allSelected);
+                checkbox.nextElementSibling.style.textDecoration = allSelected ? "line-through" : "none";
+            });
+        }
+
+        function clearList() {
+            if (confirm("Are you sure you want to clear the entire list?")) {
+                fetch("/clear-grocery-list", {
+                    method: "POST"
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Clear local storage and checkbox states
+                        document.querySelectorAll(".ingredient-checkbox").forEach(checkbox => {
+                            const ingredientText = checkbox.nextElementSibling.textContent;
+                            localStorage.removeItem(`ingredient_${ingredientText}`);
+                        });
+                        
+                        // Show "No items" message
+                        const listContainer = document.querySelector(".grocery-list-block");
+                        listContainer.innerHTML = "<h2>Grocery List</h2><p>No items in your grocery list.</p>";
+                    } else {
+                        alert("Failed to clear the grocery list. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to clear the grocery list. Please try again.");
+                });
+            }
+        }
+
+        // COMPLETELY NEW OPTIMIZED CART FUNCTIONALITY
+        
+        // Simple ingredient parser
+        function parseIngredient(text) {
+            console.log("Parsing ingredient:", text);
+            
+            // Handle Unicode fractions and mixed numbers
+            text = text.replace(/½/g, '0.5').replace(/¼/g, '0.25').replace(/¾/g, '0.75').replace(/⅓/g, '0.33');
+            
+            // Handle mixed numbers like "1 3/4"
+            text = text.replace(/(\d+)\s+(\d+\/\d+)/g, (match, whole, fraction) => {
+                const [num, den] = fraction.split('/');
+                const fractionValue = parseInt(num) / parseInt(den);
+                return (parseInt(whole) + fractionValue).toString();
+            });
+            
+            // Extract quantity, unit and item using regex  
+            const regex = /^(?:(\d+(?:\.\d+)?)\s*([A-Za-z]+)?\s+)?(.+)$/;
+            const match = text.trim().match(regex);
+            
+            if (!match) {
+                return { quantity: 1, unit: "", item: text.trim() };
+            }
+            
+            let [_, quantity, unit, item] = match;
+            
+            // Default values and normalization
+            quantity = parseFloat(quantity) || 1;
+            unit = unit ? unit.toLowerCase() : "";
+            item = item.toLowerCase();
+            
+            console.log("Parsed values:", { quantity, unit, item });
+            
+            // EARLY HANDLING: Special handling for buttermilk variants FIRST
+            if (item.includes("buttermilk")) {
+                console.log("Found buttermilk, normalizing to 'buttermilk'");
+                return { quantity, unit, item: "buttermilk", category: "dairy" };
+            }
+            
+            // Skip cooking oils used for preparation (greasing pans, skillets, etc.)
+            if (item.includes("oil") && (item.includes("skillet") || item.includes("pan") || item.includes("greasing") || item.includes("for the"))) {
+                console.log("Skipping cooking oil for preparation:", item);
+                return null; // This will be filtered out
+            }
+            
+            // Skip ANY ingredient used "for the pan" (not just oil)
+            if (item.includes("for the pan")) {
+                console.log("Skipping ingredient for pan preparation:", item);
+                return null; // This will be filtered out
+            }
+            
+            // Normalize common units
+            if (unit === "tbsp" || unit === "tablespoon") unit = "tablespoons";
+            if (unit === "tsp" || unit === "teaspoon") unit = "teaspoons";
+            if (unit === "cup") unit = "cups";
+            
+            // Convert metric units to US cooking units
+            if (unit === "liter" || unit === "liters") {
+                quantity = quantity * 4; // 1 liter = approximately 4 cups
+                unit = "cups";
+            }
+            
+            // Clean up item text
+            item = item.replace(/\b(ground|fresh|chopped|peeled|finely|and|boiled)\s+/g, '')
+                     .replace(/\s+leaves$/, '')
+                     .trim();
+            
+            // Fix worcestershire sauce parsing FIRST - handle "2 1/2 ounces" format
+            if (item.includes("worcestershire") || text.toLowerCase().includes("worcestershire")) {
+                // Parse the full original text to get proper quantity
+                const worcMatch = text.match(/^(\d+)\s*(\d+\/\d+)?\s*ounces?\s+worcestershire/i);
+                if (worcMatch) {
+                    let qty = parseInt(worcMatch[1]) || 0;
+                    if (worcMatch[2]) {
+                        const [num, den] = worcMatch[2].split('/').map(Number);
+                        qty += num / den;
+                    }
+                    return { quantity: qty, unit: "ounces", item: "worcestershire sauce", category: "pantry" };
+                } else {
+                    // Fallback for already parsed worcestershire - treat as unitless
+                    return { quantity: 1, unit: "", item: "worcestershire sauce", category: "pantry" };
+                }
+            }
+            
+            // Items that should be unitless (no measurements shown in final display) - CHECK AFTER WORCESTERSHIRE
+            const unitlessItems = [
+                "flour", "oil", "wine", "sauce", "hot sauce", "cornmeal"
+            ];
+            
+            if (unitlessItems.some(unitless => item.includes(unitless))) {
+                return {
+                    quantity: 1,
+                    unit: "",
+                    item: item,
+                    category: undefined
+                };
+            }
+            
+            // Convert egg yolks to eggs (1:1 ratio)
+            if (item.includes("yolk")) {
+                return { quantity: quantity, unit: "", item: "eggs", category: "dairy" };
+            }
+            
+            // Fix butter categorization BEFORE spice checking - butter should be dairy, not spice
+            if (item.includes("butter")) {
+                return { quantity, unit, item, category: "dairy" };
+            }
+            
+            // Special case for onions
+            if (item.includes("onion") && !item.includes("powder") && unit === "cups") {
+                return { 
+                    quantity: Math.ceil(quantity / 2),
+                    unit: "",
+                    item: "onion"
+                };
+            }
+            
+            // Special case for spices and herbs - remove measurements completely
+            const spicesAndHerbs = [
+                "powder", "pepper", "salt", "oregano", "thyme", "basil",
+                "paprika", "cumin", "cinnamon", "nutmeg", "spice", 
+                "seasoning", "flake", "chili", "herb", "garlic powder",
+                "onion powder", "vanilla", "extract", "bay leaf",
+                "rosemary", "sage", "dill", "parsley"
+            ];
+            
+            if (spicesAndHerbs.some(spice => item.includes(spice))) {
+                return {
+                    quantity: 1,
+                    unit: "",
+                    item: item,
+                    category: "spices"
+                };
+            }
+            
+            return { quantity, unit, item };
+        }
+        
+        // Determine category for an item
+        function getCategory(item) {
+            item = item.toLowerCase();
+            
+            if (item.includes("chicken") || item.includes("beef") || 
+                item.includes("pork") || item.includes("fish") || 
+                item.includes("stock") || item.includes("lamb")) {
+                return "meat";
+            }
+            
+            if (item.includes("onion") && !item.includes("powder") || 
+                item.includes("tomato") || item.includes("potato") || 
+                item.includes("garlic") && !item.includes("powder") || 
+                item.includes("carrot") || item.includes("lettuce") ||
+                item.includes("clove")) {
+                return "produce";
+            }
+            
+            if (item.includes("egg") || item.includes("milk") || 
+                item.includes("cream") || item.includes("butter") || 
+                item.includes("cheese") || item.includes("yogurt")) {
+                return "dairy";
+            }
+            
+            if (item.includes("flour") || item.includes("rice") || 
+                item.includes("pasta") || item.includes("bread") || 
+                item.includes("cereal")) {
+                return "grains";
+            }
+            
+            // Expanded list of spices and herbs
+            const spicesAndHerbs = [
+                "pepper", "salt", "spice", "powder", "oregano", "basil",
+                "thyme", "paprika", "cumin", "cinnamon", "nutmeg", "garlic powder",
+                "onion powder", "vanilla", "extract", "bay leaf", "rosemary", 
+                "sage", "dill", "parsley", "flake", "seasoning", "chili"
+            ];
+            
+            if (spicesAndHerbs.some(spice => item.includes(spice))) {
+                return "spices";
+            }
+            
+            if (item.includes("oil") || item.includes("vinegar") || 
+                item.includes("sauce") || item.includes("broth") ||
+                item.includes("wine")) {
+                return "pantry";
+            }
+            
+            return "pantry"; // Default category
+        }
+
+        // Main function to combine items and show optimized cart
+        function combineItems() {
+            try {
+                console.log('Starting combineItems function');
+                // Get all ingredients from the original list
+                const ingredients = Array.from(document.querySelectorAll("#original-list li label"))
+                    .map(label => label.textContent.trim());
+                
+                console.log('Original ingredients:', ingredients);
+                
+                // Parse ingredients and group by category
+                const categories = {
+                    produce: [],
+                    meat: [],
+                    dairy: [],
+                    grains: [],
+                    pantry: [],
+                    spices: []
+                };
+                
+                // First pass: Parse all ingredients
+                const parsedIngredients = ingredients.map(ing => {
+                    const parsed = parseIngredient(ing);
+                    console.log('Parsed ingredient:', parsed);
+                    
+                    // Skip null ingredients (filtered out items like cooking oil for preparation)
+                    if (parsed === null) {
+                        return null;
+                    }
+                    
+                    // Only set category if it wasn't already set in parseIngredient
+                    if (!parsed.category) {
+                        parsed.category = getCategory(parsed.item);
+                        console.log('Category assigned by getCategory:', parsed.category);
+                    } else {
+                        console.log('Category already set in parseIngredient:', parsed.category);
+                    }
+                    return parsed;
+                }).filter(item => item !== null); // Remove null ingredients
+                console.log('All parsed ingredients:', parsedIngredients);
+                console.log('Parsing phase completed. Total ingredients parsed:', parsedIngredients.length);
+                
+                // Second pass: Combine similar items
+                const combinedItems = {};
+                
+                console.log('Starting to combine items...');
+                Object.values(parsedIngredients).forEach(item => {
+                    // Normalize item name for better combining
+                    let normalizedItem = item.item;
+                    
+                    // Normalize flour types
+                    if (normalizedItem.includes('flour')) {
+                        normalizedItem = 'flour';
+                    }
+                    
+                    // Normalize butter types - but NOT buttermilk
+                    if (normalizedItem.includes('butter') && !normalizedItem.includes('buttermilk')) {
+                        normalizedItem = 'butter';
+                    }
+                    
+                    // Normalize garlic (cloves, garlic cloves, etc.) - but NOT garlic powder
+                    if ((normalizedItem.includes('garlic') && !normalizedItem.includes('powder')) || normalizedItem.includes('cloves')) {
+                        normalizedItem = 'garlic';
+                        // Fix the unit for garlic - remove "garlic" unit to avoid duplication
+                        if (item.unit === 'garlic') {
+                            item.unit = 'cloves';
+                        }
+                    }
+                    
+                    // Normalize oils
+                    if (normalizedItem.includes('oil')) {
+                        normalizedItem = normalizedItem; // Keep specific oil types separate
+                    }
+                    
+                    // Create a key for combining - use normalized item name
+                    const key = `${item.category}_${normalizedItem}`;
+                    console.log(`Processing item with key: ${key}`, item);
+                    
+                    if (combinedItems[key]) {
+                        // For items without units (like spices), just increment quantity
+                        if (!item.unit && !combinedItems[key].unit) {
+                            combinedItems[key].quantity += item.quantity;
+                        } else {
+                            // For items with units, keep the first unit encountered
+                            combinedItems[key].quantity += item.quantity;
+                        }
+                        console.log(`Combined with existing item, new quantity: ${combinedItems[key].quantity}`);
+                    } else {
+                        // Create new item with normalized name
+                        combinedItems[key] = { 
+                            ...item, 
+                            item: normalizedItem 
+                        };
+                        console.log(`Added new item to combined list`);
+                    }
+                });
+                
+                console.log('Combined items:', combinedItems);
+                console.log('Number of combined items:', Object.keys(combinedItems).length);
+                
+                // Check if we have items to process
+                if (Object.keys(combinedItems).length === 0) {
+                    console.error('No items to combine - combinedItems is empty');
+                    alert('No items found to optimize. Please make sure there are items in your grocery list.');
+                    return;
+                }
+                
+                // Third pass: Organize by category
+                console.log('Starting to organize by category...');
+                try {
+                    Object.values(combinedItems).forEach(item => {
+                        console.log(`Organizing item:`, item, `into category: ${item.category}`);
+                        if (categories[item.category]) {
+                            categories[item.category].push(item);
+                            console.log(`Added to ${item.category}, now has ${categories[item.category].length} items`);
+                        } else {
+                            categories.pantry.push(item); // Fallback category
+                            console.log(`Added to pantry (fallback), now has ${categories.pantry.length} items`);
+                        }
+                    });
+                    console.log('Organization phase completed successfully');
+                } catch (orgError) {
+                    console.error('Error during organization phase:', orgError);
+                    return;
+                }
+                
+                console.log('Final categories:', categories);
+                
+                // Clear the combined list
+                const combinedList = document.getElementById("combined-ingredients");
+                combinedList.innerHTML = "";
+                
+                // Add items by category
+                const categoryNames = {
+                    produce: "Produce",
+                    meat: "Meat & Seafood",
+                    dairy: "Dairy & Eggs",
+                    grains: "Grains & Pasta",
+                    pantry: "Pantry Items",
+                    spices: "Spices & Seasonings"
+                };
+                
+                // Order of categories
+                const categoryOrder = ["produce", "meat", "dairy", "grains", "pantry", "spices"];
+                
+                // Create the optimized list
+                categoryOrder.forEach(catKey => {
+                    if (categories[catKey] && categories[catKey].length > 0) {
+                        // Sort items alphabetically within category
+                        categories[catKey].sort((a, b) => a.item.localeCompare(b.item));
+                        
+                        // Add category header
+                        const categoryHeader = document.createElement("li");
+                        categoryHeader.className = "category-header";
+                        categoryHeader.innerHTML = `<h3>${categoryNames[catKey]}</h3>`;
+                        combinedList.appendChild(categoryHeader);
+                        
+                        // Add all items in this category
+                        categories[catKey].forEach((item, index) => {
+                            console.log(`Displaying item in ${catKey}:`, item);
+                            // Format the item for display
+                            let displayText = "";
+                            
+                            if (catKey === "spices") {
+                                // For spices, show only the name (no quantity or unit)
+                                const displayName = item.item.charAt(0).toUpperCase() + item.item.slice(1);
+                                displayText = displayName;
+                                console.log(`Spice display text: ${displayText}`);
+                            } else {
+                                // Items that should display without quantity/units (like spices)
+                                const unitlessDisplayItems = ["flour", "oil", "wine", "sauce", "worcestershire sauce", "cornstarch", "cornmeal"];
+                                
+                                if (unitlessDisplayItems.some(unitless => item.item.includes(unitless))) {
+                                    // Show only the name for unitless items
+                                    const displayName = item.item.charAt(0).toUpperCase() + item.item.slice(1);
+                                    displayText = displayName;
+                                    console.log(`Unitless display text: ${displayText}`);
+                                } else {
+                                    // For all other categories, show quantity, unit, and name
+                                    const quantity = item.quantity % 1 === 0 ? item.quantity : item.quantity.toFixed(1);
+                                    const displayName = item.item.charAt(0).toUpperCase() + item.item.slice(1);
+                                    
+                                    // Special formatting for certain units
+                                    if (item.unit === "cloves") {
+                                        displayText = `${quantity} cloves of ${displayName.toLowerCase()}`;
+                                    } else if (item.unit) {
+                                        displayText = `${quantity} ${item.unit} ${displayName}`;
+                                    } else {
+                                        displayText = `${quantity} ${displayName}`;
+                                    }
+                                    console.log(`Non-spice display text: ${displayText}`);
+                                }
+                            }
+                            
+                            // Create the list item
+                            const li = document.createElement("li");
+                            li.innerHTML = `
+                                <input type="checkbox" id="combined-${catKey}-${index}" class="ingredient-checkbox">
+                                <label for="combined-${catKey}-${index}" class="checkbox-label">${displayText}</label>
+                            `;
+                            combinedList.appendChild(li);
+                        });
+                    }
+                });
+                
+                // Show the optimized view
+                document.getElementById("original-list").style.display = "none";
+                document.getElementById("combined-list").style.display = "block";
+                
+                console.log('Display update completed - showing optimized view');
+                
+                // Initialize checkboxes in the new list
+                initCheckboxes();
+                
+                console.log('Optimization completed successfully!');
+                
+            } catch (error) {
+                console.error("Error combining items:", error);
+                alert("Something went wrong with optimizing the cart. Please try again.");
+            }
+        }
+
+        function toggleView() {
+            const originalList = document.getElementById("original-list");
+            const combinedList = document.getElementById("combined-list");
+            const isShowingOriginal = originalList.style.display === "none";
+            
+            originalList.style.display = isShowingOriginal ? "block" : "none";
+            combinedList.style.display = isShowingOriginal ? "none" : "block";
+            
+            // Update button text
+            const button = combinedList.querySelector("button");
+            button.textContent = isShowingOriginal ? "Show Optimized Cart" : "Show Original List";
+        }
+
+        // Edit ingredient functionality
+        function editIngredient(ingredientIndex) {
+            const listItem = document.querySelector(`#ingredient-${ingredientIndex}`).parentElement;
+            const label = listItem.querySelector('.checkbox-label');
+            const editBtn = listItem.querySelector('.ingredient-edit-btn');
+            const originalText = label.textContent;
+
+            // Create input field
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = originalText;
+            input.className = 'ingredient-edit-input';
+
+            // Create save and cancel buttons
+            const editButtons = document.createElement('div');
+            editButtons.className = 'edit-buttons';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = '✓';
+            saveBtn.className = 'save-btn';
+            saveBtn.title = 'Save changes';
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = '✕';
+            cancelBtn.className = 'cancel-btn';
+            cancelBtn.title = 'Cancel editing';
+
+            editButtons.appendChild(saveBtn);
+            editButtons.appendChild(cancelBtn);
+
+            // Replace label and edit button with input and action buttons
+            label.style.display = 'none';
+            editBtn.style.display = 'none';
+            listItem.insertBefore(input, editBtn);
+            listItem.insertBefore(editButtons, editBtn);
+
+            // Focus the input
+            input.focus();
+            input.select();
+
+            // Save function
+            function saveEdit() {
+                const newText = input.value.trim();
+                if (newText && newText !== originalText) {
+                    label.textContent = newText;
+                    // Update localStorage key if checkbox was checked
+                    const checkbox = listItem.querySelector('.ingredient-checkbox');
+                    if (checkbox.checked) {
+                        localStorage.removeItem(`ingredient_${originalText}`);
+                        localStorage.setItem(`ingredient_${newText}`, "true");
+                    }
+                }
+                resetEdit();
+            }
+
+            // Cancel function
+            function resetEdit() {
+                input.remove();
+                editButtons.remove();
+                label.style.display = '';
+                editBtn.style.display = '';
+            }
+
+            // Event listeners
+            saveBtn.addEventListener('click', saveEdit);
+            cancelBtn.addEventListener('click', resetEdit);
+
+            // Save on Enter, cancel on Escape
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                } else if (e.key === 'Escape') {
+                    resetEdit();
+                }
+            });
+
+            // Auto-save when input loses focus (unless clicking save/cancel buttons)
+            input.addEventListener('blur', function(e) {
+                // Small delay to allow button clicks to register
+                setTimeout(() => {
+                    if (document.contains(input)) {
+                        saveEdit();
+                    }
+                }, 100);
+            });
+        }
+    </script>
+</body>
+</html>
