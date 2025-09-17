@@ -1,35 +1,29 @@
 # 🍽️ QuickBasket PWA
 
-A ### Browser Compatibility
+A Progressive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
+
+## 📱 Mobile App Available!
+
+**QuickBasket Mobile** - Native Android app now available for download!
+
+### Download Options:
+- **[Release APK](releases/QuickBasket-Mobile-v0.0.1-release.apk)** (46.8 MB) - Recommended for users
+- **[Debug APK](releases/QuickBasket-Mobile-v0.0.1-debug.apk)** (99.1 MB) - For developers
+
+### Mobile App Features:
+- 📱 Native Android experience
+- 🚀 Built with React Native 0.81.4
+- 🔄 Sync with PWA version
+- 📋 Full recipe and grocery list management
+- 🌐 Recipe URL importing
+
+See [releases/README.md](releases/README.md) for installation instructions.
+
+### Browser Compatibility
 - ✅ Chrome 80+
 - ✅ Safari 11.1+
 - ✅ Firefox 78+
 - ✅ Edge 80+
-
-### Windows Desktop App
-For Windows users, a standalone executable is available:
-
-1. **Download**: Get `QuickBasket.exe` from the [latest release](https://github.com/doomfable123-cmyk/quickbasket-pwa/blob/main/dist/QuickBasket.exe)
-2. **Run**: Double-click the executable - no installation required!
-3. **Features**: Full PWA functionality including offline support
-4. **Size**: ~16MB standalone executable
-
-The desktop app includes:
-- 🖥️ **No Browser Required** - Runs as native Windows application
-- 📱 **Same PWA Features** - All web app functionality in desktop form
-- 🌐 **Recipe URL Scraping** - Import recipes from any cooking website
-- 💾 **Local Database** - All data stored locally on your computer
-- 🔄 **Automatic Updates** - Download new versions as released
-
-#### 🔐 Security & Trust
-
-To reduce Windows Defender warnings, you can digitally sign the executable:
-
-1. **Quick Setup**: Double-click `Sign QuickBasket.bat` (requires Administrator privileges)
-2. **Advanced Options**: See [CODE_SIGNING.md](CODE_SIGNING.md) for detailed instructions
-3. **Commercial Certificates**: For wider distribution, consider purchasing a code signing certificate
-
-**Note**: The unsigned version may show "Unknown Publisher" warnings - this is normal for new executables.essive Web App for smart recipe and grocery list management, optimized for tablets with web scraping capabilities.
 
 ## ✨ Features
 
@@ -54,11 +48,30 @@ The app is deployed and ready to use! Visit the live version and install it as a
 4. **Safari (iPad)**: Tap Share → "Add to Home Screen"
 5. **Android**: Use browser menu → "Add to Home screen"
 
-### Browser Compatibility
-- ✅ Chrome 80+
-- ✅ Safari 11.1+
-- ✅ Firefox 73+
-- ✅ Edge 80+
+### Windows Desktop App
+For Windows users, a standalone executable is available:
+
+1. **Download**: Get `QuickBasket.exe` from the [latest release](https://github.com/doomfable123-cmyk/quickbasket-pwa/blob/main/dist/QuickBasket.exe)
+2. **Run**: Double-click the executable - no installation required!
+3. **Features**: Full PWA functionality including offline support
+4. **Size**: ~16MB standalone executable
+
+The desktop app includes:
+- 🖥️ **No Browser Required** - Runs as native Windows application
+- 📱 **Same PWA Features** - All web app functionality in desktop form
+- 🌐 **Recipe URL Scraping** - Import recipes from any cooking website
+- 💾 **Local Database** - All data stored locally on your computer
+- 🔄 **Automatic Updates** - Download new versions as released
+
+#### 🔐 Security & Trust
+
+To reduce Windows Defender warnings, you can digitally sign the executable:
+
+1. **Quick Setup**: Double-click `Sign QuickBasket.bat` (requires Administrator privileges)
+2. **Advanced Options**: See [CODE_SIGNING.md](CODE_SIGNING.md) for detailed instructions
+3. **Commercial Certificates**: For wider distribution, consider purchasing a code signing certificate
+
+**Note**: The unsigned version may show "Unknown Publisher" warnings - this is normal for new executables.
 
 ## 🛠️ Technology Stack
 
